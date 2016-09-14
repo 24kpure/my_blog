@@ -1,6 +1,6 @@
-ssh-keygen -t rsa -C "myemail" 生成ssh key
+﻿ssh-keygen -t rsa -C "myemail" 生成ssh key
 id_rsa.pub存有ssh key（用户目录下）
-git remote add origin git@github.com:24kpure/mypain.git（连接）
+git remote add origin git@github.com:24kpure/my_blog.git（连接）
 git pull --rebase origin master（同步）
 git push -u origin master（推送）
 git init

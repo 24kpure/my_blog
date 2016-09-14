@@ -3,14 +3,14 @@
 from django.shortcuts import render
 from models import Article, Category, Comment, Collections, Joke
 from my_tools import next_id
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import JsonResponse
-import user_views
 import random
 import re
+
 
 # def show_article(request):
 #     art_id = request.GET['id']
@@ -33,9 +33,14 @@ class ArticleDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         article = super(ArticleDetailView, self).get_object()
-        # print 'id=', super(ArticleDetailView, self).options()
+        user_id = self.request.user.id
         context['comment'] = Comment.objects.filter(article=article)
-        # context['collections'] = Collections.objects.filter(article=article)[0]
+        collections = Collections.objects.filter(article=article, userId=user_id)
+        if collections.__len__() > 0:
+            collection = int(collections[0].status)
+        else:
+            collection = int(0)
+        context['collections'] = collection
         return context
 
 
@@ -43,46 +48,48 @@ class UpdateArticleDetail(ArticleDetailView):
     template_name = "edit_article.html"
 
     def get_context_data(self, **kwargs):
-        joke = super(ArticleDetailView, self).get_context_data(**kwargs)
-        #joke_length = Joke.objects.all.count()
-        #joke['joke1'] = Joke.objects.get(id=random.randint(1, joke_length))
-        #joke['joke2'] = Joke.objects.get(id=random.randint(1, joke_length))
-        #print joke['joke1'], joke['joke2']
-        return joke
+        kwargs['category_list'] = Category.objects.filter().exclude(id=0).order_by('id')
+        return super(ArticleDetailView, self).get_context_data(**kwargs)
 
 
 @login_required(login_url='login.html')
 def edit_article(request):
     if request.method != 'POST':
-       # joke_length = Joke.objects.all().__sizeof__()
-       # dic = {'joke1': Joke.objects.get(id=random.randint(1, joke_length)),
+        # joke_length = Joke.objects.all().__sizeof__()
+        # dic = {'joke1': Joke.objects.get(id=random.randint(1, joke_length)),
         #       'joke2': Joke.objects.get(id=random.randint(1, joke_length))}
-        return render(request, "edit_article.html")
+        category_list = Category.objects.filter().exclude(id=0).order_by('id')
+        return render(request, "edit_article.html", {'category_list': category_list})
     elif request.POST['aid']:
         aid = request.POST['aid']
         title = request.POST['title']
         content = request.POST['editor']
         state = request.POST['state']
+        category = int(request.POST['category'])
         abstract = content
-	dr = re.compile(r'<[^>]+>', re.S)
+        dr = re.compile(r'<[^>]+>', re.S)
         abstract = dr.sub('', abstract)
-	abstract=abstract[:6]
-        Article.objects.filter(id=aid).update(title=title, content=content, state=state, abstract=abstract)
-        article_list = Article.objects.filter(state='1')
-        return render(request, 'home.html', {'art': article_list})
+        abstract = abstract[:6]
+        Article.objects.filter(id=aid).update(title=title, content=content, state=state, abstract=abstract,
+                                              category_id=category)
+        article_list = Article.objects.filter(state='1').order_by('-update_time')
+        category_list = Category.objects.filter().order_by('id')
+        return render(request, 'home.html', {'art': article_list, 'category_list': category_list})
     else:
         title = request.POST['title']
         content = request.POST['editor']
         state = request.POST['state']
+        category = int(request.POST['category'])
         abstract = content
-	dr = re.compile(r'<[^>]+>', re.S)
+        dr = re.compile(r'<[^>]+>', re.S)
         abstract = dr.sub('', abstract)
-	abstract=abstract[:6]
+        abstract = abstract[:6]
         article = Article(id=next_id(), author=request.user.username, content=content, title=title, state=state,
-                          abstract=abstract)
+                          abstract=abstract, category_id=category)
         article.save()
-        article_list = Article.objects.filter(state='1')
-        return render(request, 'home.html', {'art': article_list})
+        article_list = Article.objects.filter(state='1').order_by('-update_time')
+        category_list = Category.objects.filter().order_by('id')
+        return render(request, 'home.html', {'art': article_list, 'category_list': category_list})
 
 
 @login_required(login_url='login.html')
@@ -112,23 +119,42 @@ def art_collections(request):
     return JsonResponse(dic)
 
 
-def art_search(request):
-    search = request.POST['search']
-    # author_article = Article.objects.filter(author__contains=search)
-    # title_article = Article.objects.filter(title__contains=search)
-    # content_article = Article.objects.filterQ(author__contains=search)
-    # art = author_article | title_article | content_article
-    art = Article.objects.filter(Q(author__contains=search) | Q(title__contains=search) | Q(content__contains=search))
-    return render(request, 'home.html', {'art': art, 'search': search})
-
-
-class Search(ListView):
+class CategoryArticle(ListView):
     template_name = "home.html"
-    context_object_name = "art"
+    context_object_name = "category_list"
 
-    def get_queryset(self, request):
-        search = request.POST['search']
-        print search
+    def get_queryset(self):
+        category_list = Category.objects.filter().order_by('id')
+        return category_list
+
+    def get_context_data(self, **kwargs):
+        id = self.kwargs['category_id']
+        art = Article.objects.filter(category=id)
+        kwargs['art'] = art
+        kwargs['category_id'] = int(id)
+        return super(CategoryArticle, self).get_context_data(**kwargs)
+
+
+# def art_search(request):
+#     search = request.POST['search']
+#     # author_article = Article.objects.filter(author__contains=search)
+#     # title_article = Article.objects.filter(title__contains=search)
+#     # content_article = Article.objects.filterQ(author__contains=search)
+#     # art = author_article | title_article | content_article
+#     art = Article.objects.filter(Q(author__contains=search) | Q(title__contains=search) | Q(content__contains=search) |
+#                                  Q(category__name__icontains=search))
+#     category_list = Category.objects.all()
+#     return render(request, 'home.html', {'art': art, 'search': search, 'category_list': category_list})
+class ArticleSearch(CategoryArticle):
+    template_name = "search.html"
+
+    def get_context_data(self, **kwargs):
+        print self.request.method
+        search = self.request.GET['search']
+        # print 'search=', search
         art = Article.objects.filter(
-            Q(author__contains=search) | Q(title__contains=search) | Q(content__contains=search))
-        return art
+            Q(author__contains=search) | Q(title__contains=search) | Q(content__contains=search) |
+            Q(category__name__icontains=search))
+        kwargs['art'] = art
+        kwargs['search_url']="?search="+search
+        return super(CategoryArticle, self).get_context_data(**kwargs)

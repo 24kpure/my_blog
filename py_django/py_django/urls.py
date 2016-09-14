@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^update_article/(?P<article_id>\w+)$', article_view.UpdateArticleDetail.as_view(), name='update_article'),
     url(r'^sub_comment$', article_view.sub_comment, name="sub_comment"),
     url(r'^art_collections$', article_view.art_collections, name="art_collections"),
-    url(r'^art_search$', article_view.art_search, name="art_search"),
+    url(r'^art_search$', article_view.ArticleSearch.as_view(), name="art_search"),
+    url(r'^category_article/(?P<category_id>\d+)$', article_view.CategoryArticle.as_view(), name="category_article"),
 
 ]

@@ -36,7 +36,7 @@ def my_login(request):
         user = authenticate(username=name, password=pwd)
         if user is not None:
             if user.is_active:
-                print user.is_active
+                # print user.is_active
                 login(request, user)
                 return render(request, 'home.html', {'art': allart(request)})
         else:
@@ -73,9 +73,11 @@ def register(request):
 
 
 def user_info(request):
-    article = Article.objects.filter(author=request.user.username).order_by('state','-update_time')
-    collections = Collections.objects.filter(userId=request.user.id,status='1')
-    return render(request, 'user_info.html', {'art': article, 'collections': collections})
+    article = Article.objects.filter(author=request.user.username).order_by('state', '-update_time')
+    collections = Collections.objects.filter(userId=request.user.id, status='1')
+    category_list = Category.objects.all().order_by('id')
+    return render(request, 'user_info.html',
+                  {'art': article, 'collections': collections, 'category_list': category_list})
 
 
 class IndexView(ListView):
@@ -89,5 +91,5 @@ class IndexView(ListView):
         return article_list
 
     def get_context_data(self, **kwargs):
-        kwargs['category_list'] = Category.objects.all().order_by('name')
+        kwargs['category_list'] = Category.objects.all().order_by('id')
         return super(IndexView, self).get_context_data(**kwargs)

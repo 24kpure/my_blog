@@ -17,8 +17,12 @@
     {% autoescape off %}
         {{ art.content }}
     {% endautoescape %}
-    <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
-           value="收藏本文">
+    {% if collection == 1 %}
+        <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
+               value="收藏本文">{% else %}
+        <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
+               value="取消收藏">{% endif %}
+
     <br>
     <h2>用户评论</h2>
     {% if  request.user.is_authenticated %}
@@ -63,8 +67,8 @@
         var btn = $("#btn-collection").val();
         if (btn == "收藏本文")status = 1;
         $.get("{% url 'art_collections' %}", {'status': status, 'id': id}, function (ret) {
-		if(status==1)info="取消收藏"
-		else info="收藏本文"
+            if (status == 1)info = "取消收藏"
+            else info = "收藏本文"
             $("#btn-collection").val(info)
         })
     }

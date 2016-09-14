@@ -27,9 +27,10 @@ class Article(models.Model):
 
 
 class Category(models.Model):
+    id=models.IntegerField(primary_key=True)
     name = models.CharField('类名', max_length=20)
     pub_date = models.DateTimeField('创建时间', auto_now_add=True)
-    update_time = models.DateTimeField('修改时间', auto_now=True)
+    introduce = models.CharField('介绍', max_length=120)
 
     def __unicode__(self):
         return self.name

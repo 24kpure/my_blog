@@ -8,12 +8,12 @@
 {% include 'head.html' %}
 
 <div class="jumbotron col-xs-12" style=" text-align:center">
-    <h1>欢迎！有技术的你</h1>
-    <p>这个网站主要用于我们的沟通，你可以发表自己的文章，或者留下链接</p>
+
+    <h2>技术点亮生活，交流携手共进</h2>
+      <p>每天都是新的起点</p>
     <div class="input-group col-xs-12 col-sm-3 col-sm-offset-1">
-        <form action="{% url 'art_search' %}" id="search_form" method="post">
-             {% csrf_token %}
-            <input type="text" name="search" id="search" placeholder="搜索" class="form-control" >
+        <form action="" id="search_form" method="post">
+            <input type="text" name="search" id="search" placeholder="搜索" class="form-control">
         </form>
         <div class="input-group-btn">
             <button class="btn btn-primary" id="btn-search" onclick="art_search()">搜索</button>
@@ -23,17 +23,21 @@
 </div>
 {% load my_page %}
 {% paginate art 6 %}
-<div class="col-xs-12 " style="background-color:rgb(230,230,230);margin-top:-50px">
-    <h2 style="text-align: center">最近更新</h2>
+<div class="col-xs-12 " style="background-color:rgb(230,230,230);margin-top:-50px;">
+    <h2 style="text-align: center">{% for item in category_list %}
+        {% if forloop.counter0 == category_id %}{{ item }}{% endif %}
+    {% endfor %}  </h2>
 
     {% for i in art %}
-        <div class="col-xs-12 col-sm-6  ">
+        <div class="col-xs-12  col-sm-4  ">
             <ul class="list-group-item">
-                <li class="list-group-item">{{ i.title }}--{{ i.author }}
+                <li class="list-group-item">
+                    <div style="text-align: center;"><h3 style="color: #6070cc">{{ i.title }}</h3></div>
+                    <div style="text-align: right">作者:{{ i.author }}</div>
                 </li>
                 <li class="list-group-item">
                     {% autoescape off %}{{ i.abstract }}{% endautoescape %}---{{ i.update_time }}</li>
-                <li class="list-group-item"><a href="{% url 'article' i.id %}">阅读全文</a></li>
+                <li class="list-group-item">标签：{{ i.category }}<div style="float: right"><a  href="{% url 'article' i.id %}">阅读全文</a></div></li>
             </ul>
             <br>
         </div>
@@ -44,11 +48,13 @@
 </div>
 </body>
 <script>
-    $(function(){
+    $(function () {
 
-});
+    });
     function art_search() {
-    $("#search_form").submit();
+        var search =$("#search").val();
+        location.href ="art_search?search="+search;
+        //alert(search);
     }
 </script>
 </html>
