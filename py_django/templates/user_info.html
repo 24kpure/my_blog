@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body style="background-color: rgb(230,230,230)">
+{% include 'head.html' %}
+<h2 style="text-align: center">日志列表</h2>
+{% for i in art %}
+    <div class="col-xs-12 col-sm-6 ">
+        <ul class="list-group-item">
+            <li class="list-group-item">{{ i.title }}--{{ i.author }}
+            </li>
+            <li class="list-group-item">
+                {% autoescape off %}{{ i.abstract }}{% endautoescape %}---{{ i.update_time }}</li>
+            <li class="list-group-item">
+                {% if i.state == '1' %}已发布{% else %}暂存状态&nbsp;
+                    <a href="{% url 'update_article' i.id %}">编辑</a>{% endif %}
+                <a href="{% url 'article' i.id %}">阅读全文</a>
+            </li>
+        </ul>
+        <br>
+    </div>
+
+{% endfor %}
+<div class="col-xs-12">
+    <h2 style="text-align: center">收藏列表</h2>
+    {% for i in collections %}
+        <div class="col-xs-12 col-sm-6 ">
+            <ul class="list-group-item">
+                <li class="list-group-item">{{ i.article.title }}--{{ i.article.author }}
+                </li>
+                <li class="list-group-item">
+                    {% autoescape off %}{{ i.article.abstract }}{% endautoescape %}---{{ i.article.update_time }}</li>
+                <li class="list-group-item">
+                    <a href="{% url 'article' i.article_id %}">阅读全文</a>
+                </li>
+            </ul>
+            <br>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>
