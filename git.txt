@@ -1,0 +1,16 @@
+ssh-keygen -t rsa -C "1033237526@qq.com" 生成ssh key
+id_rsa.pub存有ssh key（用户目录下）
+git remote add origin git@github.com:24kpure/mypain.git（连接）
+git pull --rebase origin master（同步）
+git push -u origin master（推送）
+git init
+git add
+git commit -u "commitment"
+git status
+git diff
+git reset --hard HEAD^   --回退上个版本
+git hard --标识id  回退指定版本
+git log
+git checkout -- 文件名   从暂存区内还原
+git reset HEAD 文件名   暂存区内容回退到工作区
+
