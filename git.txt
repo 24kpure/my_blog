@@ -13,4 +13,4 @@ git hard --标识id  回退指定版本
 git log
 git checkout -- 文件名   从暂存区内还原
 git reset HEAD 文件名   暂存区内容回退到工作区
-
+git reflog
