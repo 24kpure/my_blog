@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body style="background-color:rgb(220,220,220)">
+{% include 'head.html' %}
+<div class="jumbotron col-xs-12" style=" text-align:center;background-color:rgb(220,220,220)">
+    <div class="container">
+        <h2>一切美好的开始</h2>
+    </div>
+</div>
+
+<div class=" col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 " style="background-color:rgb(240,240,240);">
+    <h2 class="text-center form-signin-header ">--欢迎登陆--</h2>
+    <h4 class="text-center form-signin-header">{{ info }}</h4>
+    <form action="login" class="form-signin" role="form" method="post" id="login_form">
+        {% csrf_token %}
+        <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required
+               autofocus><br>
+        <input type="password" class="form-control" id="password" name="password" placeholder="密码"><br>
+        <input type="button" class="btn btn-lg btn-block btn-primary" value="登 录" onclick="sub_form()">
+        <br>
+    </form>
+</div>
+
+</body>
+
+<script>
+    function sub_form() {
+        if ($("#username").val() == "") {
+            alert("请输入用户名");
+            $("input[name='username']").focus();
+            return
+        }
+        if ($("#password").val() == "") {
+            alert("请输入密码");
+            $("input[name='password']").focus();
+            return
+        }
+        $("#login_form").submit();
+    }
+</script>
+
+</html>

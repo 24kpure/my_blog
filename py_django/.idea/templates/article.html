@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ art.title }}</title>
+</head>
+<body style="background-color: rgb(245,245,245)">
+{% include 'head.html' %}
+<br>
+
+<div style="text-align: center">
+    <h1>{{ art.title }}</h1>
+    <h2>{{ art.author }}</h2>
+    <h3>{{ art.update_time }}</h3>
+</div>
+<div class="col-md-8 col-md-offset-2 col-sm-12">
+    {% autoescape off %}
+        {{ art.content }}
+    {% endautoescape %}
+    {% if collection == 1 %}
+        <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
+               value="收藏本文">{% else %}
+        <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
+               value="取消收藏">{% endif %}
+
+    <br>
+    <h2>用户评论</h2>
+    {% if  request.user.is_authenticated %}
+        <div class="panel panel-default ">
+            <textarea class="form-control" id="comment" name="comment" placeholder="我也来说两句..."></textarea>
+            <input type="hidden" value="{{ art.id }}" id="art">
+        </div>
+        <input style="float: right" type="button" onclick="sub_comment()" class="btn btn-success" value="评论"/>
+        <br><br><br>
+    {% endif %}
+    <div style="background-color:rgb(240,240,240);">
+        {% for i in comment %}
+            <div class="panel panel-default">
+                <div class="panel-body" style="background-color:rgb(255,255,255);">
+                    <div style="float:left;font-size:20px;">{{ i.userName }}</div>
+                    <br><br>
+                    {{ i.content }}
+                    <br>
+                    <div style="float:right">{{ i.created_time }}</div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+
+</div>
+</body>
+<script>
+    function sub_comment() {
+
+        var content = $("#comment").val();
+        var id = $("#art").val();
+        $.get("{% url 'sub_comment' %}", {'content': content, 'id': id}, function (ret) {
+            // alert(ret.info);
+            window.location.reload();
+        })
+    }
+    function collection() {
+        var id = $("#art").val();
+        var status = 0;
+        var btn = $("#btn-collection").val();
+        if (btn == "收藏本文")status = 1;
+        $.get("{% url 'art_collections' %}", {'status': status, 'id': id}, function (ret) {
+            if (status == 1)info = "取消收藏"
+            else info = "收藏本文"
+            $("#btn-collection").val(info)
+        })
+    }
+</script>
+
+</html>
