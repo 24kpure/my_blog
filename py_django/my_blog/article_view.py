@@ -124,14 +124,14 @@ class CategoryArticle(ListView):
     context_object_name = "category_list"
 
     def get_queryset(self):
-        category_list = Category.objects.filter().order_by('id')
+        category_list = Category.objects.filter().exclude(id=0).order_by('id')
         return category_list
 
     def get_context_data(self, **kwargs):
         id = self.kwargs['category_id']
         art = Article.objects.filter(category=id)
         kwargs['art'] = art
-        kwargs['category_id'] = int(id)
+        kwargs['cate_id'] = int(id)
         return super(CategoryArticle, self).get_context_data(**kwargs)
 
 

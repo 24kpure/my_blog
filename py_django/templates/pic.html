@@ -29,7 +29,7 @@
         <ul id="sb-slider" class="sb-slider">
             {% for category in category_list %}
                 <li>
-                    <a href="" ><img src="{% get_static_prefix %}images/{{ category.id }}.jpg "
+                    <a href="{% url 'category_article' category.id %}"> <img src="{% get_static_prefix %}images/{{ category.id }}.jpg "
                                                     alt="aaaa"/></a>
                     <div class="sb-description" id="line_title"  >
                         <p style="color: black;font-size: 20px">{{ category.name }}&nbsp;{{ category.id }}/8</p>
