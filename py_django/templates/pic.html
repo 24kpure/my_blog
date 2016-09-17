@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title></title>
+    <meta charset="UTF-8"/>
+    '{% load static %}`
+    <link rel="stylesheet" href="{% static "css/demo.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "css/slicebox.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "css/custom.css" %}" type="text/css"/>
+    <style>
+
+        .top-banner a {
+            color: #7a917d;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 26px;
+            color: #019157;
+        }
+    </style>
+    <script type="text/javascript" src={% static "js/modernizr.custom.46884.js" %}></script>
+</head>
+<body>
+<div class="container">
+    <h1>技术点亮生活，交流携手共进</h1>
+    <div class="wrapper">
+
+        <ul id="sb-slider" class="sb-slider">
+            {% for category in category_list %}
+                <li>
+                    <a href="" ><img src="{% get_static_prefix %}images/{{ category.id }}.jpg "
+                                                    alt="aaaa"/></a>
+                    <div class="sb-description" id="line_title"  >
+                        <p style="color: black;font-size: 20px">{{ category.name }}&nbsp;{{ category.id }}/8</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div id="shadow" class="shadow"></div>
+
+        <div id="nav-arrows" class="nav-arrows">
+            <a href="#">Next</a>
+            <a href="#">Previous</a>
+        </div>
+
+    </div>
+
+    <div class="footer-banner" style="width:728px; margin:30px auto"></div>
+</div>
+<script type="text/javascript" src={% static "js/jquery.slicebox.js" %}></script>
+<script type="text/javascript">
+    $(function () {
+
+        var Page = (function () {
+
+            var $navArrows = $('#nav-arrows').hide(),
+                    $shadow = $('#shadow').hide(),
+                    slicebox = $('#sb-slider').slicebox({
+                        onReady: function () {
+
+                            $navArrows.show();
+                            $shadow.show();
+
+                        },
+                        orientation: 'r',
+                        cuboidsRandom: true,
+                        disperseFactor: 30
+                    }),
+
+                    init = function () {
+
+                        initEvents();
+
+                    },
+                    initEvents = function () {
+
+                        // add navigation events
+                        $navArrows.children(':first').on('click', function () {
+
+                            slicebox.next();
+                            return false;
+
+                        });
+
+                        $navArrows.children(':last').on('click', function () {
+
+                            slicebox.previous();
+                            return false;
+
+                        });
+
+                    };
+
+            return {init: init};
+
+        })();
+
+        Page.init();
+
+    });
+
+</script>
+</body>
+</html>	
