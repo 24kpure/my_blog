@@ -129,7 +129,7 @@ class CategoryArticle(ListView):
 
     def get_context_data(self, **kwargs):
         id = self.kwargs['category_id']
-        art = Article.objects.filter(category=id)
+        art = Article.objects.filter(category=id).filter(state=1)
         kwargs['art'] = art
         kwargs['cate_id'] = int(id)
         return super(CategoryArticle, self).get_context_data(**kwargs)
@@ -154,7 +154,7 @@ class ArticleSearch(CategoryArticle):
         # print 'search=', search
         art = Article.objects.filter(
             Q(author__contains=search) | Q(title__contains=search) | Q(content__contains=search) |
-            Q(category__name__icontains=search))
+            Q(category__name__icontains=search)).filter(state=1)
         kwargs['art'] = art
         kwargs['search_url']="?search="+search
         return super(CategoryArticle, self).get_context_data(**kwargs)
