@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>笔记</title>
+</head>
+<body style="background-color:rgba(168, 168, 168, 0.22)">
+{% include 'head.html' %}
+<div class="col-xs-12 col-sm-1" style="text-align: center">{% if joke1 %}<h1>{{ joke1 }}</h1>{% endif %}</div>
+
+<div class="col-xs-12 col-sm-10 " style="background-color: rgb(200,200,200)">
+
+    <form action="{% url 'edit_article' %}" id="art_form" method="post">
+        {% csrf_token %}
+        <br>
+        <div style="text-align: center;font-size: 30px"><input class="input-lg" name="title" id="title" placeholder="标题"
+                                                               type="text" value="{{ art.title }}"></div>
+        <input type="button" id="save" class="btn-default" value="暂存" onclick="save_art()"/>&nbsp;&nbsp;&nbsp;
+        <input type="button" id="pub" class="btn-default" value="发表" onclick="publish()"/>
+        &nbsp; &nbsp; &nbsp;
+        <select name="category" id="category" >
+            <option value="0">文章类型</option>
+            {% for category in category_list %}
+                <option value="{{ category.id }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+
+        <br>
+        <input type="hidden" id="state" name="state" value="1"/>
+        <input type="hidden" id="aid" name="aid" value="{{ art.id }}"/>
+        <br>
+        <textarea name="editor">{{ art.content }}</textarea>
+    </form>
+</div>
+<div class="col-xs-12 col-sm-1" style="text-align: center">{% if joke2 %}<h1>{{ joke2 }}</h1>{% endif %}</div>
+</body>
+<script>
+    function publish() {
+        if ($("#title").val() == "") {
+            alert("请填写标题");
+            return
+        }
+       //var category=$("#category option:selected");
+        if ($("#category").val() == 0) {
+            alert("请选择文章类型");
+            return
+        }
+        $("#art_form").submit();
+    }
+
+    function save_art() {
+        if ($("#title").val() == "") {
+            alert("请至少填写标题");
+            return
+        }
+
+        $("#state").val('0');
+
+        $("#art_form").submit();
+    }
+
+    CKEDITOR.replace('editor',
+            {
+                height: $(document).height(),
+            });
+
+</script>
+<style>h1 {
+    font-size: 35px;
+}</style>
+</html>

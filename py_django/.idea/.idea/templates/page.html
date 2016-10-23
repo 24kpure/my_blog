@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>page</title>
+</head>
+<body>
+
+<div class="col-xs-12"  style="text-align: center">
+    <ul class="pagination">
+
+        {% if art.has_previous %}
+            <li><a href="?page={{ art.previous_page_number }}">
+                上一页
+            </a></li>
+        {% endif %}
+
+
+        {% if first_page == current_page %}
+            <li class="active"><a>1</a></li>
+        {% else %}
+            <li ><a href="?page=1">1</a></li>
+        {% endif %}
+
+        {% if pages_first > 2 %}
+            <li><a>...</a></li>
+        {% endif %}
+
+        {% for page in pages %}
+            {% if page == current_page %}
+                <li class="active"><a>{{ page }}</a></li>
+            {% else %}
+                <li><a href="?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+
+        {% if pages_last < last_page %}
+            <li><a>...</a></li>
+        {% endif %}
+
+
+        {% if last_page != 1 %}
+            {% if last_page == current_page %}
+                <li class="active"><a>{{ last_page }}</a></li>
+            {% else %}
+                <li><a href="?page={{ last_page }}">{{ last_page }}</a></li>
+            {% endif %}
+        {% endif %}
+
+        {% if art.has_next %}
+            <li>
+                <a href="?page={{ art.next_page_number }}">
+                下一页
+            </a></li>
+        {% endif %}
+    </ul>
+</div>
+</body>
+</html>

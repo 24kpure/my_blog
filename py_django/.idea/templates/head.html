@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-<html lang="en">
+<html lang="en" xmlns:wb="http://open.weibo.com/wb">
 <head>
     <meta charset="UTF-8">
+    <meta property="wb:webmaster" content="e6704dbe1d2aa318"/>
     <title>{{ title }}--技术交流</title>
-    <script src="{% static "jquery-3.1.0.min.js" %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}" type="text/css"/>
     <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-datetimepicker.css" %}" type="text/css"/>
+    <script src="{% static "jquery-3.1.0.min.js" %}"></script>
     <script src="{% static "bootstrap/js/bootstrap.js" %}"></script>
     <script src="{% static "ckeditor_4.5.10/ckeditor.js" %}"></script>
+    <script src="{% static "bootstrap/js/bootstrap-datetimepicker.js" %}"></script>
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=4190823627" type="text/javascript"
+            charset="utf-8"></script>
 
 </head>
-<body>
+<body style="background: rgb(240,240,240)" >
 
-<div class="col-sm-12 col-md-12" style="margin-bottom: -20px">
+<div class="col-sm-12 col-md-12">
 
-    <div class="row">
-
+    <div class="row" >
         <nav class="navbar  navbar-inverse">
             <div class="container">
-                <div class="nav pull-left">
-                    <a class="navbar-brand" data-toggle="dropdown" href="#">
-                        文章分类<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        {% for category in category_list %}
-                            <li><a href="{% url 'category_article' category.id %}">{{ category.name }}</a></li>
-                        {% endfor %}
+                {#                <div class="nav pull-left">#}
+                {#                    <li><a class="navbar-brand" data-toggle="dropdown" href="#">#}
+                {#                        文章分类<span class="caret"></span>#}
+                {#                    </a></li>#}
+                {#                    <ul class="dropdown-menu">#}
+                {#                        {% for category in category_list %}#}
+                {#                            <li><a href="{% url 'category_article' category.id %}">{{ category.name }}</a></li>#}
+                {#                        {% endfor %}#}
+                {#                    </ul>#}
+                {#                </div>#}
+                <div class="=nav pull-left">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 16px"> 文章分类<span
+                                    class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                {% for category in category_list %}
+                                            <li><a href="{% url 'category_article' category.id %}">{{ category.name }}</a></li>
+                                        {% endfor %}
+
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
+                <div class="nav pull-right">
 
+                    <a class="navbar-brand" href="{% url 'home' %}">首页</a>
 
-                    <div class="nav pull-right">
-                        <a class="navbar-brand" href="{% url 'home' %}">首页</a>
-                        {% if  request.user.is_authenticated %}
-                            <a class="navbar-brand" href="{% url 'user_info' %}">{{ request.user.username }}</a>
-                            <a class="navbar-brand" href="{% url 'edit_article' %}">写日志</a>
-                            <a class="navbar-brand" href="{% url 'logout' %}">注销</a>
-                        {% else %}
-                            <a class="navbar-brand" href="{% url 'login' %}">登录</a>
-                            <a class="navbar-brand" href="{% url 'register' %}">注册</a>
-                        {% endif %}
-                    </div>
+                    {% if  request.user.is_authenticated %}
+                        <a class="navbar-brand" href="{% url 'user_info' %}">{{ request.user.username }}</a>
+                        <a class="navbar-brand" href="{% url 'edit_article' %}">写日志</a>
+                        <a class="navbar-brand" href="{% url 'logout' %}">注销</a>
+                    {% else %}
+                        <a class="navbar-brand" href="{% url 'login' %}">登录</a>
+
+                        <a class="navbar-brand" href="{% url 'register' %}">注册</a>
+                    {% endif %}
+                </div>
 
             </div>
         </nav>
 
     </div>
 </div>
+{#  <wb:login-button type="2,2" onlogin="login" onlogout="logout">登录按钮</wb:login-button>#}
 </body>
+
 </html>

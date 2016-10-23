@@ -27,7 +27,7 @@ class Article(models.Model):
 
 
 class Category(models.Model):
-    id=models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField('类名', max_length=20)
     pub_date = models.DateTimeField('创建时间', auto_now_add=True)
     introduce = models.CharField('介绍', max_length=120)
@@ -62,3 +62,13 @@ class Joke(models.Model):
 
     def __unicode__(self):
         return self.content
+
+
+# class News(models.Model):
+#     id = models.IntegerField(primary_key=True)
+#     title = models.CharField(max_length=60)
+#     picture = models.ImageField()
+#     content = models.TextField()
+#
+#     def __unicode__(self):
+#         return self.title

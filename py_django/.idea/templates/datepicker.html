@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HI</title>
+    {% load staticfiles %}
+    <script src="{% static "jquery-3.1.0.min.js" %}"></script>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-datetimepicker.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.css" %}" type="text/css"/>
+    <script src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+    <script src="{% static "bootstrap/js/bootstrap-datetimepicker.js" %}"></script>
+
+
+</head>
+<body><br>
+
+
+<div class="form-group">
+    <label for="dtp_input1" class="col-md-3 control-label">DateTime Picking</label>
+    <div class="input-group date form_date col-md-2" data-date="2016-09-16"
+         data-date-format="yyyy-mm-dd" data-link-field="dtp_input1">
+        <input class="form-control" size="16" id="date1" type="text" value="2016-09-01" readonly>
+        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+    </div>
+    <button class="btn-default" onclick="al()">日期是？</button>
+</div>
+<pre>&lt;p&gt;程序员的自我修养&lt;/p&gt;</pre>
+<div>
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+            任务填写
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">日志</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">周报</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">月报</a></li>
+        </ul>
+
+    </div>
+    <div class="col-sm-8 col-sm-offset-2">
+        <del>删除的文本</del>
+        &nbsp; <u>下划线</u> &nbsp; <em>斜体</em> &nbsp;
+        <address>
+            <strong>地址</strong><br>
+            795 Folsom Ave, Suite 600<br>
+            San Francisco, CA 94107<br>
+            停留显示完整内容$nbsp;<abbr title="Phone">P:</abbr> (123) 456-7890
+        </address>
+
+        <blockquote>
+            <p>程序员的自我修养</p>
+            <footer>那就是变得更好</footer>
+        </blockquote>
+
+        <button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <a href="#" class="btn btn-default  active" role="button">Link</a>
+        <input type="button" class="btn-default" value="座右铭" onclick="zym()"><br><br>
+        <div>
+            <input type="text" id="kbd" oninput="kbd()"><span class="glyphicon glyphicon-search"></span>
+
+        </div>
+        <h4>您输入的内容如下:</h4>
+        <div id="kbd-xs">keyboard-style you deserve it</div>
+        <br>
+
+        <table class="table  table-condensed">
+
+            <tr>
+                <td class="active">...</td>
+                <td class="success">...</td>
+                <td class="warning">...</td>
+                <td class="danger">...</td>
+                <td class="info">...</td>
+            </tr>
+        </table>
+
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <input type="file" id="exampleInputFile">
+                <p class="help-block">Example block-level help text here.</p>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Check me out
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+
+    </div>
+
+</div>
+
+</body>
+<script>
+    $('.form_date').datetimepicker({
+        language: 'fr',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        // showMeridian: 1 选到时间
+    });
+    function al() {
+        date1 = $("#date1");
+        alert(date1.val());
+
+    }
+    function kbd() {
+        data = $("#kbd");
+        kbdxs = '<kbd>' + data.val() + '</kbd>';
+        if (data.val().length > 10) {
+            data.attr('size', 10 + data.val().length);
+        }
+        $("#kbd-xs").html(kbdxs);
+    }
+    function zym() {
+        $("#kbd").val("sometimes god doesn't give you wat you want ,not because you don't deserve it,but you deserve more");
+        kbd();
+    }
+</script>
+</html>

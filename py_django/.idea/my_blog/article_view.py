@@ -5,10 +5,10 @@ from models import Article, Category, Comment, Collections, Joke
 from my_tools import next_id
 from django.views.generic import ListView, DetailView, View
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.http import JsonResponse
-import random
+from django.db.models import Count
 import re
 
 
@@ -72,9 +72,9 @@ def edit_article(request):
         abstract = abstract[:6]
         Article.objects.filter(id=aid).update(title=title, content=content, state=state, abstract=abstract,
                                               category_id=category)
-        article_list = Article.objects.filter(state='1').order_by('-update_time')
-        category_list = Category.objects.filter().order_by('id')
-        return render(request, 'home.html', {'art': article_list, 'category_list': category_list})
+        # //article_list = Article.objects.filter(state='1').order_by('-update_time')
+        # //category_list = Category.objects.filter().order_by('id')
+        return HttpResponseRedirect('/')
     else:
         title = request.POST['title']
         content = request.POST['editor']
@@ -124,14 +124,18 @@ class CategoryArticle(ListView):
     context_object_name = "category_list"
 
     def get_queryset(self):
-        category_list = Category.objects.filter().order_by('id')
+        category_list = Category.objects.filter().exclude(id=0).order_by('id')
         return category_list
 
     def get_context_data(self, **kwargs):
         id = self.kwargs['category_id']
-        art = Article.objects.filter(category=id)
+        art = Article.objects.filter(category=id).filter(state=1)
+        results = Comment.objects.values('article__title', 'article__id' , 'article__category__name').annotate(dcount=Count('article')).order_by(
+            '-dcount')
+        print results
+        kwargs['max_comment'] = results
         kwargs['art'] = art
-        kwargs['category_id'] = int(id)
+        kwargs['cate_id'] = int(id)
         return super(CategoryArticle, self).get_context_data(**kwargs)
 
 
@@ -151,10 +155,10 @@ class ArticleSearch(CategoryArticle):
     def get_context_data(self, **kwargs):
         print self.request.method
         search = self.request.GET['search']
-        # print 'search=', search
+        #print 'search=', search
         art = Article.objects.filter(
             Q(author__contains=search) | Q(title__contains=search) | Q(content__contains=search) |
-            Q(category__name__icontains=search))
+            Q(category__name__icontains=search)).filter(state=1)
         kwargs['art'] = art
-        kwargs['search_url']="?search="+search
+        kwargs['search_url'] = "?search=" + search
         return super(CategoryArticle, self).get_context_data(**kwargs)

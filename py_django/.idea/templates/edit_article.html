@@ -13,8 +13,7 @@
     <form action="{% url 'edit_article' %}" id="art_form" method="post">
         {% csrf_token %}
         <br>
-        <div style="text-align: center;font-size: 30px"><input class="input-lg" name="title" id="title" placeholder="标题"
-                                                               type="text" value="{{ art.title }}"></div>
+        <div style="text-align: center;font-size: 30px"><input class="input-lg" name="title" id="title" placeholder="标题" type="text" value="{{ art.title }}"></div>
         <input type="button" id="save" class="btn-default" value="暂存" onclick="save_art()"/>&nbsp;&nbsp;&nbsp;
         <input type="button" id="pub" class="btn-default" value="发表" onclick="publish()"/>
         &nbsp; &nbsp; &nbsp;
@@ -35,6 +34,11 @@
 <div class="col-xs-12 col-sm-1" style="text-align: center">{% if joke2 %}<h1>{{ joke2 }}</h1>{% endif %}</div>
 </body>
 <script>
+    $(function () {
+        art_category_id={{ art.category.id }};
+        $("#category").find("option[value='"+art_category_id+"']").attr("selected",true);
+       // alert({{ art.category.id }});
+    });
     function publish() {
         if ($("#title").val() == "") {
             alert("请填写标题");
@@ -50,7 +54,12 @@
 
     function save_art() {
         if ($("#title").val() == "") {
-            alert("请至少填写标题");
+            alert("请填写标题");
+            return
+        }
+
+         if ($("#category").val() == 0) {
+            alert("请选择文章类型");
             return
         }
 

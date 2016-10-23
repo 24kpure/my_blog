@@ -7,29 +7,37 @@
 <body>
 {% include 'head.html' %}
 {% include 'pic.html' %}
-{#<div class="jumbotron col-xs-12" style=" text-align:center">#}
 
-{#    <h2>技术点亮生活，交流携手共进</h2>#}
-{#      <p>每天都是新的起点</p>#}
-{#    <div class="input-group col-xs-12 col-sm-3 col-sm-offset-1">#}
-{#        <form action="" id="search_form" method="post">#}
-{#            <input type="text" name="search" id="search" placeholder="搜索" class="form-control">#}
-{#        </form>#}
-{#        <div class="input-group-btn">#}
-{#            <button class="btn btn-primary" id="btn-search" onclick="art_search()">搜索</button>#}
-{#        </div>#}
-{#    </div>#}
 
 {#</div>#}
 {% load my_page %}
 {% paginate art 6 %}
-<div class="col-xs-12 " style="background-color:rgb(230,230,230);margin-top:-50px;">
-    <h2 style="text-align: center">{% for item in category_list %}
-        {% if forloop.counter0 == category_id %}{{ item }}{% endif %}
-    {% endfor %}  </h2>
 
-    {% for i in art %}
-        <div class="col-xs-12  col-sm-6  ">
+ <pre></pre>
+<div class="col-xs-12 " style="margin-top:10px;">
+
+    <div class="input-group col-xs-12 col-sm-3 col-sm-offset-1" style="margin-bottom: 30px;margin-top: 20px">
+
+        <form action="" id="search_form" method="post">
+            <input type="text" name="search" id="search" placeholder="搜索" class="form-control">
+            {% csrf_token %}
+        </form>
+        <div class="input-group-btn">
+            <button class="btn btn-primary" id="btn-search" onclick="art_search()">搜索</button>
+        </div>
+    </div>
+
+
+    <div class="col-xs-12  col-md-6 col-md-offset-1  ">
+        <h3 style="text-align: center">
+            {% if cate_id == -1 %}最近更新
+            {% else %}
+                {% for item in category_list %}
+                    {% if forloop.counter == cate_id %}{{ item }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %} </h3>
+        {% for i in art %}
             <ul class="list-group-item">
                 <li class="list-group-item">
                     <div style="text-align: center;"><h3 style="color: #6070cc">{{ i.title }}</h3></div>
@@ -37,24 +45,48 @@
                 </li>
                 <li class="list-group-item">
                     {% autoescape off %}{{ i.abstract }}{% endautoescape %}---{{ i.update_time }}</li>
-                <li class="list-group-item">标签：{{ i.category }}<div style="float: right"><a  style="color: #6070cc" href="{% url 'article' i.id %}">阅读全文</a></div></li>
+                <li class="list-group-item">标签：{{ i.category }}
+                    <div style="float: right"><a style="color: #6070cc" href="{% url 'article' i.id %}">阅读全文</a></div>
+                </li>
             </ul>
             <br>
-        </div>
+        {% endfor %}
+    </div>
 
-    {% endfor %}
+
+    <div class=".hidden-sm col-md-3 col-md-offset-2  " ><h3 class="text-center" style="color: red">热帖</h3>
+        {% for i in max_comment %}
+            <div class="panel panel-default " style="margin-bottom: 5px;">
+                <ul>
+                    <li class="list-group-item">
+                        <p style="color: #cc323c">{{ i.article__title }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        收藏数：12 &nbsp;&nbsp;&nbsp;评论数：{{ i.dcount }}
+                    <li class="list-group-item">作者：{{ i.article__author }}
+                        <div style="float: right"><a style="color: #6070cc" href="{% url 'article' i.article__id %}">阅读全文</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <br>
+        {% endfor %}
+    </div>
+
 
     {% include 'page.html' %}
 </div>
+{% include 'foot.html' %}
 </body>
 <script>
     $(function () {
 
     });
     function art_search() {
-        var search =$("#search").val();
-        location.href ="art_search?search="+search;
+        var search = $("#search").val();
+        location.href = "art_search?search=" + search;
         //alert(search);
     }
 </script>
+
 </html>

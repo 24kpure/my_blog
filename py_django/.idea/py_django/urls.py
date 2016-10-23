@@ -19,6 +19,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from my_blog import user_views
 from my_blog import article_view
+from my_blog import weekly_view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -38,5 +39,8 @@ urlpatterns = [
     url(r'^art_collections$', article_view.art_collections, name="art_collections"),
     url(r'^art_search$', article_view.ArticleSearch.as_view(), name="art_search"),
     url(r'^category_article/(?P<category_id>\d+)$', article_view.CategoryArticle.as_view(), name="category_article"),
+
+
+    url(r'^datepicker$',weekly_view.IndexView.as_view()),
 
 ]

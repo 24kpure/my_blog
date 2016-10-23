@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+</head>
+<body style="background-color:rgb(220,220,220)">
+{% include 'head.html' %}
+
+<br><br><br><br><br><br>
+<div class=" col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 " style="background-color:rgb(240,240,240);">
+    <h2 class="text-center form-signin-header ">--欢迎加入--</h2>
+
+    <h4 class="text-center form-signin-header">{{ info }}</h4>
+    <form action="" class="form-signin" role="form" method="post" id="register_form">
+        {% csrf_token %}
+        <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required
+               autofocus><br>
+        <input type="password" class="form-control" id="password" name="password" placeholder="密码"><br>
+        <input type="password" class="form-control" id="password2" name="password2" placeholder="确认密码"><br>
+        <input type="text" class="form-control" id="email" name="email" placeholder="邮箱"><br>
+        <input type="button" class="btn btn-lg btn-block btn-primary" value="注 册" onclick="sub_form()">
+        <br>
+    </form>
+</div>
+
+</body>
+
+<script>
+    function sub_form() {
+        var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+        if ($("#username").val() == "") {
+            alert("请输入用户名");
+            $("input[name='username']").focus();
+            return
+        }
+        if ($("#password").val() == "") {
+            alert("请输入密码");
+            $("input[name='password']").focus();
+            return
+        }
+        if ($("#password2").val() == "") {
+            alert("请确认密码");
+            $("input[name='password']").focus();
+            return
+        }
+        if ($("#email").val() == "") {
+            alert("请输入邮箱");
+            $("input[name='email']").focus();
+            return
+        }
+          if ($("#password2").val() != $("#password").val()) {
+            alert("两次密码输入不一致");
+            $("input[name='password']").focus();
+            return
+        }
+         if (! reg.test($("#email").val()) ) {
+            alert("您输入的邮箱格式不合法");
+            $("input[name='email']").focus();
+            return
+        }
+
+        $("#register_form").submit();
+    }
+</script>
+
+</html>

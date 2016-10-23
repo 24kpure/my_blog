@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from models import Article, Category, Collections
-from my_tools import next_id
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic import ListView
+
+from models import Article, Category, Collections, Comment
 
 
 def haslog(request):
@@ -15,10 +17,6 @@ def haslog(request):
     if not request.user.is_authenticated():
         result = False
     return result
-
-
-def home(request):
-    return render(request, 'home.html', {'art': art(request)})
 
 
 def allart(request):
@@ -38,7 +36,8 @@ def my_login(request):
             if user.is_active:
                 # print user.is_active
                 login(request, user)
-                return render(request, 'home.html', {'art': allart(request)})
+                return HttpResponseRedirect('/')  # 跳转到index界面
+
         else:
             info = u"用户名或密码错误"
     return render(request, "login.html", {'info': info})
@@ -47,8 +46,7 @@ def my_login(request):
 def my_logout(request):
     if haslog(request):
         logout(request)
-    article_list = Article.objects.filter(state='1')
-    return render(request, 'home.html', {'art': article_list})
+    return HttpResponseRedirect('/')
 
 
 def register(request):
@@ -67,8 +65,7 @@ def register(request):
             user.save()
             user = authenticate(username=name, password=pwd)
             login(request, user)
-            article_list = Article.objects.filter(state='1')
-            return render(request, 'home.html', {'art': article_list})
+            return HttpResponseRedirect('/')
         return render(request, "register.html", {"info": info})
 
 
@@ -91,5 +88,10 @@ class IndexView(ListView):
         return article_list
 
     def get_context_data(self, **kwargs):
+        results = Comment.objects.values('article__title', 'article__id', 'article__author',
+                                         'article__category__name').annotate(dcount=Count('article')).order_by(
+            '-dcount')
+        kwargs['max_comment'] = results
         kwargs['category_list'] = Category.objects.all().order_by('id')
+        kwargs['cate_id'] = -1
         return super(IndexView, self).get_context_data(**kwargs)
