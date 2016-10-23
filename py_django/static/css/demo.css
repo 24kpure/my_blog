@@ -17,14 +17,14 @@
 
 /* General Demo Style */
 body {
-	background: #e4ebe9 url(../images/fancy_deboss.png) repeat top left;
+
 	color: #444;
 	font-family: "PT Sans Narrow", Arial, sans-serif;
 	font-size: 13px;
 	font-weight: 400;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    min-width: 320px;
+    min-width: 420px;
 }
 
 a {

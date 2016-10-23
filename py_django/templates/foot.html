@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>foot</title>
+</head>
+<body>
+<div class=" col-xs-12" style="height: 200px;text-align: center">
+    <h4 >没有广告,奇趣一下</h4>
+            <input type="text" id="kbd" oninput="kbd()"><span class="glyphicon glyphicon-search"></span>
+    <h4>您输入的内容如下:</h4>
+        <div id="kbd-xs"></div>
+        </div>
+
+</body>
+<script>
+     function kbd() {
+        data = $("#kbd");
+        kbdxs = '<kbd>' + data.val() + '</kbd>';
+        if (data.val().length > 10) {
+            data.attr('size', 10 + data.val().length);
+        }
+        $("#kbd-xs").html(kbdxs);
+    }
+    $(function zym() {
+        $("#kbd").val("sometimes god doesn't give you wat you want ,not because you don't deserve it,but you deserve more");
+        kbd();
+    });
+</script>
+</html>
