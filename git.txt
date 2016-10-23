@@ -5,7 +5,7 @@ git pull --rebase origin master（同步）
 git push -u origin master（推送）
 git init
 git add
-git commit -u "commitment"
+git commit -m "commitment"
 git status
 git diff
 git reset --hard HEAD^   --回退上个版本
