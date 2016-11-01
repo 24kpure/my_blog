@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}" type="text/css"/>
     <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.css" %}" type="text/css"/>
     <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-datetimepicker.css" %}" type="text/css"/>
+
     <script src="{% static "jquery-3.1.0.min.js" %}"></script>
     <script src="{% static "bootstrap/js/bootstrap.js" %}"></script>
     <script src="{% static "ckeditor_4.5.10/ckeditor.js" %}"></script>
@@ -24,16 +25,6 @@
     <div class="row" >
         <nav class="navbar  navbar-inverse">
             <div class="container">
-                {#                <div class="nav pull-left">#}
-                {#                    <li><a class="navbar-brand" data-toggle="dropdown" href="#">#}
-                {#                        文章分类<span class="caret"></span>#}
-                {#                    </a></li>#}
-                {#                    <ul class="dropdown-menu">#}
-                {#                        {% for category in category_list %}#}
-                {#                            <li><a href="{% url 'category_article' category.id %}">{{ category.name }}</a></li>#}
-                {#                        {% endfor %}#}
-                {#                    </ul>#}
-                {#                </div>#}
                 <div class="=nav pull-left">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">

@@ -89,7 +89,7 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         results = Comment.objects.values('article__title', 'article__id', 'article__author',
-                                         'article__category__name').annotate(dcount=Count('article')).order_by(
+                                         'article__category__name', 'article__likes').annotate(dcount=Count('article')).order_by(
             '-dcount')
         kwargs['max_comment'] = results
         kwargs['category_list'] = Category.objects.all().order_by('id')

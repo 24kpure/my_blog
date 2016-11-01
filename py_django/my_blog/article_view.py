@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 # coding=utf-8
-from django.shortcuts import render
-from models import Article, Category, Comment, Collections, Joke
-from my_tools import next_id
-from django.views.generic import ListView, DetailView, View
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django.db.models import Q
-from django.http import JsonResponse
-from django.db.models import Count
 import re
+
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView
+
+from models import Article, Category, Comment, Collections
+from my_tools import next_id
 
 
 # def show_article(request):
@@ -107,11 +109,13 @@ def sub_comment(request):
 def art_collections(request):
     status = request.GET['status']
     id = request.GET['id']
-    article = Article.objects.get(id=id);
+    article = Article.objects.get(id=id)
     if Collections.objects.filter(article=article, userId=request.user.id).__len__() == 0:
         Collections.objects.create(article=article, userId=request.user.id, status=status)
     else:
         Collections.objects.filter(article=article, userId=request.user.id).update(status=status)
+    article.likes=Collections.objects.filter(article=article, userId=request.user.id).__len__()
+    article.save()
     info = '收藏本文'
     if status == '1':
         info = '取消收藏'
@@ -130,7 +134,8 @@ class CategoryArticle(ListView):
     def get_context_data(self, **kwargs):
         id = self.kwargs['category_id']
         art = Article.objects.filter(category=id).filter(state=1)
-        results = Comment.objects.values('article__title', 'article__id' , 'article__category__name').annotate(dcount=Count('article')).order_by(
+        results = Comment.objects.values('article__title', 'article__id', 'article__category__name').annotate(
+            dcount=Count('article')).order_by(
             '-dcount')
         print results
         kwargs['max_comment'] = results
@@ -155,7 +160,7 @@ class ArticleSearch(CategoryArticle):
     def get_context_data(self, **kwargs):
         print self.request.method
         search = self.request.GET['search']
-        #print 'search=', search
+        # print 'search=', search
         art = Article.objects.filter(
             Q(author__contains=search) | Q(title__contains=search) | Q(content__contains=search) |
             Q(category__name__icontains=search)).filter(state=1)

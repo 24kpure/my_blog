@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>瑜哥站点</title>
+    {% load static %}
+    <script src="{% static "jquery-3.1.0.min.js" %}"></script>
+    <script src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "css/demo.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "css/slicebox.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "css/custom.css" %}" type="text/css"/>
+</head>
+<body>
+<div class="col-xs-12 container ">
+    <div class="wrapper ">
+        <ul id="sb-slider" class="sb-slider">
+
+            <li><img class="img-responsive" src="{% get_static_prefix %}image/1.jpg "/></li>
+            <li><img class="img-responsive" src="{% get_static_prefix %}image/2.jpg "/></li>
+            <li><img class="img-responsive" src="{% get_static_prefix %}image/3.jpg "/></li>
+
+        </ul>
+
+        <div id="nav-arrows" class="nav-arrows">
+            <a href="#">Next</a>
+            <a href="#">Previous</a>
+        </div>
+    </div>
+    <div class="footer-banner" style="width:1180px; margin:30px auto"></div>
+
+</div>
+</div>
+<script type="text/javascript" src={% static "js/jquery.slicebox.js" %}></script>
+<script type="text/javascript">
+    $(function () {
+
+        var Page = (function () {
+
+            var $navArrows = $('#nav-arrows').hide(),
+                    $shadow = $('#shadow').hide(),
+                    slicebox = $('#sb-slider').slicebox({
+                        onReady: function () {
+                            $navArrows.show();
+                        },
+                        orientation: 'r',
+                        cuboidsRandom: true,
+                        disperseFactor: 30
+                    }),
+                    init = function () {
+                        initEvents();
+                        slicebox.jump(5);
+                    },
+                    initEvents = function () {
+                        // add navigation events
+                        $navArrows.children(':first').on('click', function () {
+                            slicebox.next();
+                            return false;
+                        });
+
+                        $navArrows.children(':last').on('click', function () {
+                            slicebox.previous();
+                            return false;
+                        });
+
+                        $(function () {
+                            var cate_id ={{ cate_id }};
+                            if (cate_id > 0) {
+                                slicebox.jump({{ cate_id }});
+                            }
+                        });
+
+                    };
+
+            return {init: init};
+
+        })();
+
+        Page.init();
+
+    });
+
+</script>
+</body>
+</html>

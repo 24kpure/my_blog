@@ -21,3 +21,11 @@ class IndexView(ListView):
         article_list = Article.objects.filter(state='1').order_by('-update_time')
         return article_list
 
+
+class Test(ListView):
+    template_name = "test.html"
+    context_object_name = "art"
+
+    def get_queryset(self):
+        article_list = Article.objects.filter(state='1').order_by('-update_time')
+        return article_list

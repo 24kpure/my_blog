@@ -16,27 +16,38 @@
     </style>
     <script type="text/javascript" src={% static "js/modernizr.custom.46884.js" %}></script>
 </head>
-<body><div style="background: rgb(220,220,220)">
-<div class="container " >
-    <h1>技术点亮生活，交流携手共进</h1>
-    <div class="wrapper ">
-        <ul id="sb-slider" class="sb-slider">
-            {% for category in category_list %}
-                <li>
-                    <abbr title="{{ category.name }}&nbsp;{{ category.id }}/8" ><a href="{% url 'category_article' category.id %}">
-                        <img  class="img-responsive"  src="{% get_static_prefix %}images/{{ category.id }}.jpg "/></a></abbr>
-                </li>
-            {% endfor %}
-        </ul>
+<body>
+<div style="background: rgb(220,220,220)">
+    <div class="col-xs-12 container ">
+        <h1>技术点亮生活，交流携手共进</h1>
+        <div class="wrapper ">
+            <ul id="sb-slider" class="sb-slider">
+                {% for category in category_list %}
+                    <li>
+                        <abbr title="{{ category.name }}&nbsp;{{ category.id }}/8"><a
+                                href="{% url 'category_article' category.id %}">
+                            <img class="img-responsive" src="{% get_static_prefix %}images/{{ category.id }}.jpg "/></a></abbr>
+                    </li>
+                {% endfor %}
+            </ul>
 
-        <div id="nav-arrows" class="nav-arrows">
-            <a href="#">Next</a>
-            <a href="#">Previous</a>
+            <div id="nav-arrows" class="nav-arrows">
+                <a href="#">Next</a>
+                <a href="#">Previous</a>
+            </div>
+            <div id="nav-dots" class="nav-dots">
+                {% for category in category_list %}
+                    {% if forloop.first %}
+                        <span class="nav-dot-current"></span>
+                    {% else %}
+                        <span></span>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
-    <div class="footer-banner" style="width:1180px; margin:30px auto"></div>
+        <div class="footer-banner" style="width:1180px; margin:30px auto"></div>
 
-</div>
+    </div>
 </div>
 <script type="text/javascript" src={% static "js/jquery.slicebox.js" %}></script>
 <script type="text/javascript">
@@ -45,14 +56,21 @@
         var Page = (function () {
 
             var $navArrows = $('#nav-arrows').hide(),
-                    $shadow = $('#shadow').hide(),
+                    $navDots = $('#nav-dots').hide(),
+                    $nav = $navDots.children('span'),
                     slicebox = $('#sb-slider').slicebox({
                         onReady: function () {
+                            $navDots.show();
                             $navArrows.show();
                         },
                         orientation: 'r',
                         cuboidsRandom: true,
-                        disperseFactor: 30
+                        disperseFactor: 30,
+                        onBeforeChange: function (pos) {
+                            $nav.removeClass('nav-dot-current');
+                            $nav.eq(pos).addClass('nav-dot-current');
+                        }
+
                     }),
                     init = function () {
                         initEvents();
@@ -71,20 +89,26 @@
                         });
 
                         $(function () {
-                            var cate_id={{ cate_id }};
-                            if(cate_id>0){
-                            slicebox.jump({{ cate_id }});
+                            var cate_id ={{ cate_id }};
+                            if (cate_id > 0) {
+                                slicebox.jump({{ cate_id }});
                             }
                         });
-
+                        $nav.each( function( i ) {
+								$( this ).on( 'click', function( event ) {
+									var $dot = $( this );
+									if( !slicebox.isActive() ) {
+										$nav.removeClass( 'nav-dot-current' );
+										$dot.addClass( 'nav-dot-current' );
+									}
+									slicebox.jump( i + 1 );
+									return false;
+								} );
+							} );
                     };
-
             return {init: init};
-
         })();
-
         Page.init();
-
     });
 
 </script>

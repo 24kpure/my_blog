@@ -62,7 +62,7 @@
                         <p style="color: #cc323c">{{ i.article__title }}</p>
                     </li>
                     <li class="list-group-item">
-                        收藏数：12 &nbsp;&nbsp;&nbsp;评论数：{{ i.dcount }}
+                        收藏数：{{ i.article__likes }} &nbsp;&nbsp;&nbsp;评论数：{{ i.dcount }}
                     <li class="list-group-item">作者：{{ i.article__author }}
                         <div style="float: right"><a style="color: #6070cc" href="{% url 'article' i.article__id %}">阅读全文</a>
                         </div>
@@ -72,7 +72,6 @@
             <br>
         {% endfor %}
     </div>
-
 
     {% include 'page.html' %}
 </div>
