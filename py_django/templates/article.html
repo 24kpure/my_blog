@@ -4,25 +4,27 @@
     <meta charset="UTF-8">
     <title>{{ art.title }}</title>
 </head>
-<body style="background-color: rgb(245,245,245)">
+<body style="background-color: rgb(225,225,225)">
 {% include 'head.html' %}
 <br>
 
-<div style="text-align: center">
-    <h1>{{ art.title }}</h1>
-    <h2>{{ art.author }}</h2>
-    <h3>{{ art.update_time }}</h3>
-</div>
-<div class="col-md-8 col-md-offset-2 col-sm-12">
-    {% autoescape off %}
-        {{ art.content }}
-    {% endautoescape %}
-    {% if collections  == 0  %}
+
+<div class="col-md-8 col-md-offset-2 col-sm-12" style="background-color: rgb(235,235,235);margin-top: -20px">
+    <div id="mainContent">
+        <div style="text-align: center">
+            <h1>{{ art.title }}</h1>
+            <h2>{{ art.author }}</h2>
+            <h3>{{ art.update_time }}</h3>
+        </div>
+        {% autoescape off %}
+            {{ art.content }}
+        {% endautoescape %}
+    </div>
+    {% if collections  == 0 %}
         <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
                value="收藏本文">{% else %}
         <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
                value="取消收藏">{% endif %}
-
     <br>
     <h2>用户评论</h2>
     {% if  request.user.is_authenticated %}
@@ -44,10 +46,8 @@
                     <div style="float:right">{{ i.created_time }}</div>
                 </div>
             </div>
-
         {% endfor %}
     </div>
-
 
 </div>
 </body>
@@ -72,6 +72,15 @@
             $("#btn-collection").val(info)
         })
     }
+    $(function foot() {
+                var mainContent=$("#mainContent");
+                //alert(mainContent.height());
+                var height=mainContent.height();
+                var minHeight=$(window).height() - 300;
+                if(height<minHeight)
+                mainContent.css("height",minHeight)
+            }
+    )
 </script>
 
 </html>

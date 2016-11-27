@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>笔记</title>
 </head>
-<body style="background-color:rgba(168, 168, 168, 0.22)">
+<body style="background-color:rgba(168, 168, 168, 0.22);">
 {% include 'head.html' %}
 <div class="col-xs-12 col-sm-1" style="text-align: center">{% if joke1 %}<h1>{{ joke1 }}</h1>{% endif %}</div>
 
-<div class="col-xs-12 col-sm-10 " style="background-color: rgb(200,200,200)">
+<div class="col-xs-12 col-sm-10 " style="background-color: rgb(210,210,210)">
 
     <form action="{% url 'edit_article' %}" id="art_form" method="post">
         {% csrf_token %}
@@ -34,6 +34,7 @@
 <div class="col-xs-12 col-sm-1" style="text-align: center">{% if joke2 %}<h1>{{ joke2 }}</h1>{% endif %}</div>
 </body>
 <script>
+{#     8.27 10.15#}
     {% if art != null %}
     $(function () {
         art_category_id={{ art.category.id }};
@@ -50,7 +51,7 @@
         if ($("#category").val() == 0) {
             alert("请选择文章类型");
             return
-        }8.27 10.15
+        }
         $("#art_form").submit();
     }
 
