@@ -9,6 +9,7 @@ from my_tools import next_id
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 
 
 class IndexView(ListView):
@@ -29,3 +30,11 @@ class Test(ListView):
     def get_queryset(self):
         article_list = Article.objects.filter(state='1').order_by('-update_time')
         return article_list
+
+
+def tiaozhuan(request):
+    if request.method == 'GET':
+        url = request.GET['url']
+        # url ='https://' + url
+        print url
+    return HttpResponseRedirect(url)

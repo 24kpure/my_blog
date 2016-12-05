@@ -44,4 +44,7 @@ urlpatterns = [
     url(r'^datepicker$',weekly_view.IndexView.as_view()),
     url(r'^test$',weekly_view.Test.as_view()),
 
+    #tbkw
+    url(r'^tz$',weekly_view.tiaozhuan,name='tiaozhuan'),
+
 ]
