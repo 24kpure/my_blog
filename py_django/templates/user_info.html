@@ -21,10 +21,10 @@
             <li class="list-group-item">
                 {% autoescape off %}{{ i.abstract }}{% endautoescape %}---{{ i.update_time }} <div style="float: right">{{ i.author }}</div></li>
             <li class="list-group-item">
-                {% if i.state == '1' %}已发布{% else %}暂存状态&nbsp;
+                {% if i.state == '1' %}已发布{% else %}暂存状态&nbsp; {% endif %}
                     <div style="float: right"><a href="{% url 'update_article' i.id %}">编辑</a>
                         </div>
-                    {% endif %}
+                    
             </li>
         </ul>
         <br>
