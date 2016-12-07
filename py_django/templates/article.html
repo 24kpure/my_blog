@@ -9,23 +9,29 @@
 <br>
 
 
-<div class="col-md-8 col-md-offset-2 col-sm-12" style="background-color: rgb(235,235,235);margin-top: -20px">
+<div class="col-md-8 col-md-offset-2 col-sm-12" >
     <div id="mainContent">
         <div style="text-align: center">
-            <h2>{{ art.title }}</h1>
-
+            <h2>{{ art.title }}</h2>
         </div>
         {% autoescape off %}
             {{ art.content }}
         {% endautoescape %}
     </div>
-    {% if collections  == 0 %}
-        <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
-               value="收藏本文">{% else %}
-        <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
-               value="取消收藏">{% endif %}
+
     <br>
-    <h2>用户评论</h2>
+    {% if  request.user.is_authenticated %}
+        {% if collections  == 0 %}
+            <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
+                   value="收藏本文">{% else %}
+            <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
+                   value="取消收藏">{% endif %}
+    {% endif %}
+
+    {% if comment %}
+        <h2>用户评论</h2>
+    {% endif %}
+
     {% if  request.user.is_authenticated %}
         <div class="panel panel-default ">
             <textarea class="form-control" id="comment" name="comment" placeholder="我也来说两句..."></textarea>
@@ -72,12 +78,12 @@
         })
     }
     $(function foot() {
-                var mainContent=$("#mainContent");
+                var mainContent = $("#mainContent");
                 //alert(mainContent.height());
-                var height=mainContent.height();
-                var minHeight=$(window).height() - 300;
-                if(height<minHeight)
-                mainContent.css("height",minHeight)
+                var height = mainContent.height();
+                var minHeight = $(window).height() - 300;
+                if (height < minHeight)
+                    mainContent.css("height", minHeight)
             }
     )
 </script>
