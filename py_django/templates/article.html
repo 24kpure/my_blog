@@ -4,56 +4,58 @@
     <meta charset="UTF-8">
     <title>{{ art.title }}</title>
 </head>
-<body style="background-color: rgb(225,225,225)">
+<body style="background-color: rgb(220,220,220)">
 {% include 'head.html' %}
-<br>
 
 
-<div class="col-md-8 col-md-offset-2 col-sm-12" >
+<div class="col-md-8 col-md-offset-2 col-sm-12" style="background: rgb(235,235,235)">
     <div id="mainContent">
         <div style="text-align: center">
             <h2>{{ art.title }}</h2>
+            <br>
         </div>
         {% autoescape off %}
             {{ art.content }}
         {% endautoescape %}
-    </div>
+       <br>
+        <div id="heightSpace"></div>
+        {% if  request.user.is_authenticated %}
+            {% if collections  == 0 %}
+                <input type="button" style="float:right" class="btn btn-danger" onclick="collection()"
+                       id='btn-collection'
+                       value="收藏本文">{% else %}
+                <input type="button" style="float:right" class="btn btn-danger" onclick="collection()"
+                       id='btn-collection'
+                       value="取消收藏">{% endif %}
+            <br><br>
+        {% endif %}
 
-    <br>
-    {% if  request.user.is_authenticated %}
-        {% if collections  == 0 %}
-            <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
-                   value="收藏本文">{% else %}
-            <input type="button" style="float:right" class="btn btn-danger" onclick="collection()" id='btn-collection'
-                   value="取消收藏">{% endif %}
-    {% endif %}
+        {% if comment %}
+            <h2>用户评论</h2>
+        {% endif %}
 
-    {% if comment %}
-        <h2>用户评论</h2>
-    {% endif %}
-
-    {% if  request.user.is_authenticated %}
-        <div class="panel panel-default ">
-            <textarea class="form-control" id="comment" name="comment" placeholder="我也来说两句..."></textarea>
-            <input type="hidden" value="{{ art.id }}" id="art">
-        </div>
-        <input style="float: right" type="button" onclick="sub_comment()" class="btn btn-success" value="评论"/>
-        <br><br><br>
-    {% endif %}
-    <div style="background-color:rgb(240,240,240);">
-        {% for i in comment %}
-            <div class="panel panel-default">
-                <div class="panel-body" style="background-color:rgb(255,255,255);">
-                    <div style="float:left;font-size:20px;">{{ i.userName }}</div>
-                    <br><br>
-                    {{ i.content }}
-                    <br>
-                    <div style="float:right">{{ i.created_time }}</div>
-                </div>
+        {% if  request.user.is_authenticated %}
+            <div class="panel panel-default ">
+                <textarea class="form-control" id="comment" name="comment" placeholder="我也来说两句..."></textarea>
+                <input type="hidden" value="{{ art.id }}" id="art">
             </div>
-        {% endfor %}
+            <input style="float: right" type="button" onclick="sub_comment()" class="btn btn-success" value="评论"/>
+            <br><br><br>
+        {% endif %}
+        <div style="background-color:rgb(240,240,240);">
+            {% for i in comment %}
+                <div class="panel panel-default">
+                    <div class="panel-body" style="background-color:rgb(255,255,255);">
+                        <div style="float:left;font-size:20px;">{{ i.userName }}</div>
+                        <br><br>
+                        {{ i.content }}
+                        <br>
+                        <div style="float:right">{{ i.created_time }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-
 </div>
 </body>
 <script>
@@ -79,11 +81,14 @@
     }
     $(function foot() {
                 var mainContent = $("#mainContent");
+                var heightSpace=$("#heightSpace");
                 //alert(mainContent.height());
                 var height = mainContent.height();
-                var minHeight = $(window).height() - 300;
-                if (height < minHeight)
-                    mainContent.css("height", minHeight)
+                var minHeight = $(window).height()-50;
+                if (height < minHeight) {
+                    mainContent.css("height", minHeight);
+                    heightSpace.css("height", 300);
+                }
             }
     )
 </script>

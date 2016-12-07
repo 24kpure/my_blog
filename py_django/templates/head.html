@@ -23,7 +23,7 @@
 <div class="col-sm-12 col-md-12">
 
     <div class="row" >
-        <nav class="navbar  navbar-inverse">
+        <nav class=" navbar-inverse">
             <div class="container">
                 <div class="=nav pull-left">
                     <ul class="nav navbar-nav">
@@ -34,7 +34,6 @@
                                 {% for category in category_list %}
                                             <li><a href="{% url 'category_article' category.id %}">{{ category.name }}</a></li>
                                         {% endfor %}
-
                             </ul>
                         </li>
                     </ul>
