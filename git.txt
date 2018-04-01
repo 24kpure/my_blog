@@ -20,3 +20,9 @@ git checkout <name>        切换分支
 git checkout -b <name>       创建+切换分支
 git merge <name>         合并某分支到当前分支
 git branch -d <name>     删除分支
+
+
+github慢的情况下 添加代理
+git config --global http.proxy socks5://127.0.0.1:1080
+git config --global https.proxy socks5://127.0.0.1:1080
+
